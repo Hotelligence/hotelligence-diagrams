@@ -1,0 +1,31 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Đăng xuất" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":HomePage" as HP  
+boundary ":NavigationBar" as NB  
+control ":AuthenticationService" as AS
+
+activate U
+U -> NB: Click vào tên người dùng trên thanh điều hướng
+activate NB
+NB --> U: Hiển thị menu chức năng
+U -> NB: Click vào nút "Đăng xuất"
+NB -> AS: Gửi yêu cầu đăng xuất
+activate AS
+AS -> AS: Xác thực yêu cầu
+AS --> NB: Gửi kết quả đăng xuất thành công
+deactivate AS
+NB --> HP: Chuyển hướng về trang chủ
+deactivate NB
+activate HP
+HP --> U: Hiển thị trang chủ cho người dùng
+deactivate HP
+
+@enduml

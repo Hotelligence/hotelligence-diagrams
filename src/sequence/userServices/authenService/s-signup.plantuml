@@ -1,0 +1,111 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Đăng ký" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":HomePage" as HP  
+boundary ":SignUpPage" as SP  
+boundary ":OnboardingPage" as OP
+boundary ":AccountInfoPage" as AIP
+boundary ":AddPassWordPage" as APP
+boundary ":AuthenticatePage" as AP  
+boundary ":EmailInbox" as E  
+control ":AuthenticationService" as AS
+database ":Database" as DB
+
+activate U
+U -> HP : Click nút "Đăng ký" trên màn hình
+activate HP
+HP -> SP: Chuyển hướng đến trang "Đăng ký"
+deactivate HP
+activate SP
+SP --> U : Hiển thị trang "Đăng ký"
+
+U -> SP : Nhập email
+U -> SP : Click nút "Tiếp tục"
+SP -> AS : Gửi yêu cầu đến hệ thống xác thực
+activate AS
+
+' Trường hợp Email hợp lệ
+alt Email hợp lệ 
+    AS --> SP: Trả về kết quả hợp lệ
+    SP -> AP : Chuyển hướng đến trang "Xác thực"
+    deactivate SP
+    activate AP
+    AP --> U : Hiển thị trang "Xác thực"
+
+    AS -> E: Hệ thống gửi mã OTP qua email đã nhập
+    activate E 
+    E --> U: Hiện thị mã OTP trong hộp thư
+    deactivate E
+    U -> AP : Nhập mã OTP
+    U -> AP : Nhấn nút "Xác nhận"
+    AP -> AS : Gửi yêu cầu đến hệ thống xác thực
+    activate AS
+
+    ' Trường hợp Mã OTP hợp lệ
+    alt Mã OTP hợp lệ
+        AS --> AP: Trả về kết quả hợp lệ
+        AP --> OP: Chuyển hướng đến trang giới thiệu
+        deactivate AP
+        activate OP
+        OP --> U : Hiển thị trang giới thiệu
+        U -> OP : Click nút "Bắt đầu"
+        OP --> AIP : Chuyển hướng đến trang \n "Nhập thông tin tài khoản"
+        deactivate OP
+        activate AIP
+        AIP --> U : Hiển thị trang "Nhập thông tin tài khoản"
+        U -> AIP : Nhập Họ và Tên
+        U -> AIP : Nhấn nút "Tiếp tục"
+        AIP --> APP : Chuyển hướng đến trang \n "Tạo mật khẩu"
+        deactivate AIP
+        activate APP
+        APP --> U : Hiển thị trang "Tạo mật khẩu"
+        U -> APP : Nhập mật khẩu
+
+        'Check mật khẩu
+        alt Mật khẩu không hợp lệ
+            APP --> U : Hiển thị thông báo mật khẩu không hợp lệ
+            U -> APP : Nhập lại mật khẩu
+        else Mật khẩu hợp lệ
+            U -> APP : Nhấn nút "Tạo mật khẩu"
+            APP -> AS : Gửi yêu cầu đến hệ thống xác thực
+            deactivate APP
+            activate AS
+            AS --> AP: Trả về kết quả hợp lệ
+            activate AP
+            AS -> DB: Gửi thông tin đến cơ sở dữ liệu
+            activate DB
+            DB -> DB: Lưu thông tin tài khoản
+            DB --> AS: Trả về kết quả
+            deactivate DB
+            deactivate AS
+            AP --> U : Hiển thị trang chủ với tài khoản đã đăng nhập
+            deactivate AP
+        end 
+        
+    ' Trường hợp Mã OTP không hợp lệ
+    else Mã OTP không hợp lệ
+        AS --> AP: Trả về kết quả không hợp lệ
+        deactivate AS
+        activate AP
+        AP --> U : Hiển thị thông báo mã OTP không hợp lệ
+        deactivate AP
+    end
+
+' Trường hợp Email không hợp lệ
+else Email không hợp lệ
+    AS --> AP: Trả về kết quả không hợp lệ
+    deactivate AS
+    activate AP        
+    AP --> U : Hiển thị thông báo email không hợp lệ
+    deactivate AP
+end
+
+
+@enduml

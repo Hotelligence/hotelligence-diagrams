@@ -1,0 +1,133 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Đăng nhập" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":HomePage" as HP  
+boundary ":LoginPage" as LP  
+boundary ":AuthenticatePage" as AP  
+boundary ":EmailInbox" as E  
+boundary ":GoogleLoginPage" as GLP
+control ":AuthenticationService" as AS
+
+activate U
+U -> HP : Click nút "Đăng nhập" trên màn hình
+activate HP
+HP -> LP: Chuyển hướng đến trang "Đăng nhập"
+deactivate HP
+activate LP
+LP --> U : Hiển thị trang "Đăng nhập"
+
+'Đăng nhập bằng tài khoản
+opt Đăng nhập bằng tài khoản
+    U -> LP : Nhập email
+    U -> LP : Click nút "Tiếp tục"
+    LP -> AS : Gửi yêu cầu đến hệ thống xác thực
+    activate AS
+    
+    ' Trường hợp Email hợp lệ
+    alt Email hợp lệ 
+        AS --> LP: Trả về kết quả hợp lệ
+        LP -> AP : Chuyển hướng đến trang "Xác thực"
+        deactivate LP
+        activate AP
+        AP --> U : Hiển thị trang "Xác thực"
+
+        ' Chọn phương xác thực
+        ' Xác thực bằng mã OTP
+        opt Xác thực bằng mã OTP
+            AS -> E: Hệ thống gửi mã OTP qua email đã nhập
+            activate E 
+            E --> U: Hiện thị mã OTP trong hộp thư
+            deactivate E
+            U -> AP : Nhập mã OTP
+            U -> AP : Nhấn nút "Xác nhận"
+            AP -> AS : Gửi yêu cầu đến hệ thống xác thực
+            activate AS
+            ' Trường hợp Mã OTP hợp lệ
+            alt Mã OTP hợp lệ
+                AS --> AP: Trả về kết quả hợp lệ
+                AP --> HP: Chuyển hướng về trang chủ
+                deactivate AP
+                activate HP
+                HP --> U: Hiển thị trang chủ với tài khoản đã đăng nhập
+                deactivate HP
+            ' Trường hợp Mã OTP không hợp lệ
+            else Mã OTP không hợp lệ
+                AS --> AP: Trả về kết quả không hợp lệ
+                deactivate AS
+                activate AP
+                AP --> U : Hiển thị thông báo mã OTP không hợp lệ
+                deactivate AP
+            end
+
+        ' Xác thực bằng mật khẩu
+        else Xác thực bằng mật khẩu
+            U -> AP: Click nút "Xác thực bằng mật khẩu"
+            activate AP
+            AP --> U: Hiển thị form nhập mật khẩu
+            U -> AP: Nhập mật khẩu
+            U -> AP: Click nút "Xác nhận"
+            AP -> AS: Gửi yêu cầu đến hệ thống xác thực
+            activate AS
+            'Trường hợp Mật khẩu hợp lệ
+            alt Mật khẩu hợp lệ
+                AS --> AP: Trả về kết quả hợp lệ
+                AP --> HP: Chuyển hướng về trang chủ
+                deactivate AP
+                activate HP
+                HP --> U: Hiển thị trang chủ với tài khoản đã đăng nhập
+                deactivate HP
+            ' Trường hợp Mật khẩu không hợp lệ
+            else Mật khẩu không hợp lệ
+                AS --> AP: Trả về kết quả không hợp lệ
+                deactivate AS
+                activate AP
+                AP --> U : Hiển thị thông báo mật khẩu không hợp lệ
+                deactivate AP
+            end
+        end
+
+    ' Trường hợp Email không hợp lệ
+    else Email không hợp lệ
+        AS --> AP: Trả về kết quả không hợp lệ
+        deactivate AS
+        activate AP        
+        AP --> U : Hiển thị thông báo email không hợp lệ
+        deactivate AP
+    end
+
+' Đăng nhập bằng bên thứ 3
+else Đăng nhập bằng bên thứ 3
+    U -> LP : Click nút "Đăng nhập bằng Google"
+    activate LP
+    LP -> AS : Gửi yêu cầu đến hệ thống xác thực
+    activate AS
+    AS -> AS: Xác thực yêu cầu
+    AS --> GLP: Mở trang đăng nhập Google
+    deactivate AS
+    activate GLP
+    GLP --> U: Hiển thị trang đăng nhập Google
+    U -> GLP: Chọn tài khoản đăng nhập
+    U -> GLP: Click nút "Tiếp tục"
+    GLP -> AS: Gửi thông tin tài khoản đến hệ thống xác thực
+    activate AS
+    AS -> AS: Xác thực OAuth2
+    AS --> GLP: Trả về kết quả xác thực
+    deactivate AS
+    GLP --> LP: Chuyển hướng về trang "Đăng nhập"
+    deactivate GLP
+    LP --> HP: Chuyển hướng về trang chủ
+    deactivate LP
+    activate HP
+    HP --> U: Hiển thị trang chủ với tài khoản đã đăng nhập
+    deactivate HP
+end
+
+
+@enduml

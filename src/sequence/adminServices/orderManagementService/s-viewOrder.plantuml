@@ -1,0 +1,31 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Xem đơn hàng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Quản trị viên\n Khách sạn" as A
+boundary ":NavigationBar" as NB  
+boundary ":MyOrdersPage" as MOP 
+boundary ":OrderDetailsPage" as ODP
+
+activate A
+A -> NB: Click vào tên người dùng trên thanh điều hướng
+activate NB
+NB --> A: Hiển thị menu chức năng
+A -> NB: Click vào nút "Quản lý Đơn hàng"
+NB -> MOP: Chuyển đến trang "Quản lý Đơn hàng"
+deactivate NB
+activate MOP
+MOP --> A: Hiển thị danh sách đơn hàng
+A -> MOP: Chọn một đơn hàng bất kỳ
+MOP -> ODP: Chuyển đến trang "Chi tiết đơn hàng"
+deactivate MOP
+activate ODP
+ODP --> A: Hiển thị thông tin chi tiết đơn hàng
+deactivate ODP
+
+@enduml

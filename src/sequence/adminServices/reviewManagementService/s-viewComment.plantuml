@@ -1,0 +1,33 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Xem bình luận" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Quản trị viên\n Khách sạn" as A
+boundary ":NavigationBar" as NB  
+boundary ":MyRoomsPage" as MRP 
+boundary ":RoomDetailsPage" as RDP
+
+activate A
+A -> NB: Click vào tên người dùng trên thanh điều hướng
+activate NB
+NB --> A: Hiển thị menu chức năng
+A -> NB: Click vào nút "Quản lý Phòng"
+NB -> MRP: Chuyển đến trang "Quản lý phòng"
+deactivate NB
+activate MRP
+MRP --> A: Hiển thị danh sách phòng
+A -> MRP: Chọn một phòng bất kỳ
+MRP -> RDP: Chuyển đến trang "Chi tiết phòng"
+deactivate MRP
+activate RDP
+RDP --> A: Hiển thị thông tin chi tiết phòng
+A -> RDP: Click vào tab "Bình luận"
+RDP --> A: Hiển thị danh sách bình luận
+deactivate RDP
+
+@enduml

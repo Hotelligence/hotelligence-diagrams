@@ -1,0 +1,37 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Trả lời bình luận" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Quản trị viên\n Khách sạn" as A
+boundary ":NavigationBar" as NB  
+boundary ":MyRoomsPage" as MRP 
+boundary ":RoomDetailsPage" as RDP
+control ":ReviewManagementService" as RMS
+database ":Database" as DB  
+
+ref over A, RDP
+    [Xem bình luận]
+end ref
+
+activate A
+activate RDP
+A -> RDP: Chọn một bình luận bất kỳ và nhấn "Trả lời"
+RDP --> A: Hiển thị hộp thoại bình luận
+A -> RDP: Nhập nội dung trả lời và nhấn "Gửi"
+RDP -> RMS: Gửi yêu cầu trả lời bình luận
+activate RMS
+RMS -> DB: Lưu trả lời vào cơ sở dữ liệu
+activate DB
+DB --> RMS: Trả về kết quả
+deactivate DB
+RMS --> RDP: Trả về kết quả
+deactivate RMS
+RDP --> A: Hiển thị bình luận đã trả lời
+deactivate RDP
+
+@enduml

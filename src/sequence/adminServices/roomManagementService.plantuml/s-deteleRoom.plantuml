@@ -1,0 +1,41 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Xóa Phòng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Quản trị viên\n Khách sạn" as A
+boundary ":NavigationBar" as NB  
+boundary ":MyRoomsPage" as MRP 
+control ":RoomManagementService" as RMS
+database ":Database" as DB  
+
+activate A
+A -> NB: Click vào tên người dùng trên thanh điều hướng
+activate NB
+NB --> A: Hiển thị menu chức năng
+A -> NB: Click vào nút "Quản lý Phòng"
+NB -> MRP: Chuyển đến trang "Quản lý Phòng"
+deactivate NB
+activate MRP
+MRP --> A: Hiển thị danh sách phòng quản lý
+A -> MRP: Click vào nút "Xóa" của phòng cần xóa
+MRP --> A: Hiển thị thông báo xác nhận xóa phòng
+A -> MRP: Click vào nút "Xác nhận"
+
+MRP -> RMS: Gửi yêu cầu xóa phòng
+activate RMS
+RMS -> DB: Truy vấn phòng cần xóa trong cơ sở dữ liệu
+activate DB
+DB --> RMS: Trả về kết quả xóa phòng
+deactivate DB
+RMS --> MRP: Trả về kết quả xóa phòng
+deactivate RMS
+MRP --> A: Hiển thị thông báo kết quả xóa phòng
+deactivate MRP
+
+
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Tìm kiếm Phòng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":HomePage" as HP  
+boundary ":SearchResultPage" as SRP  
+control ":RoomService" as RS
+database ":Database" as DB  
+
+activate U
+U -> HP: Click vào thanh tìm kiếm trên màn hình
+activate HP
+U -> HP: Chọn hoặc nhập địa điểm cần tìm kiếm
+U -> HP: Chọn ngày check-in và check-out
+U -> HP: Chọn số lượng người và phòng
+U -> HP: Click vào nút "Tìm kiếm"
+
+HP -> RS: Gửi yêu cầu tìm kiếm phòng
+activate RS
+RS -> DB: Truy vấn dữ liệu phòng
+activate DB
+DB --> RS: Trả về dữ liệu phòng
+deactivate DB
+HP -> SRP: Chuyển hướng đến trang "Kết quả tìm kiếm"
+deactivate HP
+activate SRP
+
+RS --> SRP: Trả về dữ liệu phòng
+deactivate RS
+SRP --> U: Hiển thị kết quả tìm kiếm
+deactivate SRP
+
+@enduml

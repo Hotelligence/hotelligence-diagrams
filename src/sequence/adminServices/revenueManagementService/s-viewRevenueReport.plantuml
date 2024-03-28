@@ -1,0 +1,31 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Xem báo cáo doanh thu" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Quản trị viên\n Khách sạn" as A
+boundary ":NavigationBar" as NB  
+boundary ":MyRevenuePage" as MRP 
+boundary ":RevenueReportsPage" as RRP
+
+activate A
+A -> NB: Click vào tên người dùng trên thanh điều hướng
+activate NB
+NB --> A: Hiển thị menu chức năng
+A -> NB: Click vào nút "Quản lý Doanh thu"
+NB -> MRP: Chuyển đến trang "Quản lý doanh thu"
+deactivate NB
+activate MRP
+MRP --> A: Hiển thị màn hình quản lý doanh thu
+A -> MRP: Chọn tab "Xem báo cáo doanh thu"
+MRP -> RRP: Chuyển đến trang "Báo cáo doanh thu"
+deactivate MRP
+activate RRP
+RRP --> A: Hiển thị báo cáo doanh thu
+deactivate RRP
+
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Thêm Phòng vào Giỏ hàng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":RoomDetailPage" as RDP
+control ":RoomService" as RS
+database ":Database" as DB  
+
+ref over U, DB
+    [Xem chi tiết phòng]
+end ref
+
+activate U
+
+U -> RDP: Nhấn vào nút "Thêm vào giỏ hàng"
+activate RDP
+RDP -> RS: Gửi yêu cầu thêm phòng vào giỏ hàng
+activate RS
+RS -> DB: Lấy thông tin phòng
+activate DB
+DB --> RS: Trả về thông tin phòng
+deactivate DB
+RS -> RS: Thêm phòng vào giỏ hàng
+RS --> RDP: Trả về kết quả thêm phòng vào giỏ hàng
+deactivate RS
+RDP --> U: Hiển thị thông báo "Đã thêm vào giỏ hàng"
+deactivate RDP
+
+
+
+@enduml

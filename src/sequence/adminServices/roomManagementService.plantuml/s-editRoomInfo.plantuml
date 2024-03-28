@@ -1,0 +1,45 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Sửa thông tin Phòng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Quản trị viên\n Khách sạn" as A
+boundary ":NavigationBar" as NB  
+boundary ":MyRoomsPage" as MRP 
+boundary ":RoomDetailsPage" as RDP
+control ":RoomManagementService" as RMS
+database ":Database" as DB  
+
+activate A
+A -> NB: Click vào tên người dùng trên thanh điều hướng
+activate NB
+NB --> A: Hiển thị menu chức năng
+A -> NB: Click vào nút "Quản lý Phòng"
+NB -> MRP: Chuyển đến trang "Quản lý Phòng"
+deactivate NB
+activate MRP
+MRP --> A: Hiển thị danh sách phòng quản lý
+A -> MRP: Chọn phòng cần sửa thông tin
+MRP -> RDP: Chuyển đến trang "Chi tiết Phòng"
+deactivate MRP
+activate RDP
+RDP --> A: Hiển thị thông tin chi tiết phòng
+A -> RDP: Người dùng sửa thông tin hiển thị trên màn hình
+A -> RDP: Click vào nút "Lưu thay đổi"
+RDP -> RMS: Gửi yêu cầu chỉnh sửa phòng
+activate RMS
+RMS -> DB: Truy vấn phòng cần chỉnh sửa \ntrong cơ sở dữ liệu
+activate DB
+DB --> RMS: Trả về kết quả chỉnh sửa phòng
+deactivate DB
+RMS --> RDP: Trả về kết quả chỉnh sửa phòng
+deactivate RMS
+RDP --> A: Hiển thị thông báo kết quả chỉnh sửa phòng
+deactivate RDP
+
+
+@enduml

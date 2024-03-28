@@ -1,0 +1,39 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Xem thông tin Phòng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":SearchResultPage" as SRP  
+boundary ":RoomDetailPage" as RDP
+control ":RoomService" as RS
+database ":Database" as DB  
+
+ref over U, DB
+    [Tìm kiếm phòng]
+end ref
+
+
+activate U
+U -> SRP: Chọn một phòng từ danh sách phòng\n hiển thị trên màn hình
+activate SRP
+SRP -> RS: Gửi yêu cầu xem thông tin phòng
+activate RS
+RS -> DB: Lấy dữ liệu phòng từ database
+activate DB
+DB --> RS: Trả về dữ liệu phòng
+deactivate DB
+SRP -> RDP: Chuyển hướng đến\n trang chi tiết phòng
+deactivate SRP
+activate RDP
+deactivate DB
+RS -> RDP: Trả về dữ liệu thông tin phòng
+deactivate RS
+RDP --> U: Hiển thị danh sách phòng đã lọc
+deactivate RDP
+
+@enduml

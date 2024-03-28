@@ -1,0 +1,46 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Thanh toán" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":BookingPage" as BP
+boundary ":PaymentPage" as PP
+control ":PaymentService" as PS
+database ":Database" as DB  
+
+ref over U, DB
+    [Đặt phòng]
+end ref
+
+opt Người dùng chọn "Thanh toán bằng tiền mặt"
+    note right of U
+        Người dùng trả tiền trực tiếp khi nhận phòng
+    end note
+else Người dùng chọn "Thanh toán trực tuyến"
+    activate BP
+    BP -> PP: Chuyển đến trang "Thanh toán"
+    deactivate BP
+    activate PP
+    PP --> U: Hiển thị mã QR thanh toán
+    U -> PP: Quét mã QR thanh toán
+    PP -> PS: Gửi yêu cầu thanh toán
+    activate PS
+    PS -> DB: Truy vấn dữ liệu thanh toán
+    activate DB
+    DB -> DB: Xác thực \nthông tin thanh toán
+    DB --> PS: Trả về kết quả thanh toán
+    deactivate DB
+    PS --> PP: Trả về kết quả thanh toán
+    deactivate PS
+    PP --> U: Hiển thị kết quả thanh toán
+    deactivate PP
+end
+
+activate U
+
+@enduml

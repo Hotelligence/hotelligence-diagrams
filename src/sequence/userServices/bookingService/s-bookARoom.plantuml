@@ -1,0 +1,51 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Đặt phòng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":CartPage" as CP
+boundary ":BookingPage" as BP
+control ":BookingService" as BS
+database ":Database" as DB  
+
+ref over U, DB
+    [Thêm Phòng vào Giỏ hàng]
+end ref
+
+activate U
+
+U -> CP: Nhấn vào giỏ hàng trên màn hình
+activate CP
+CP --> U: Hiển thị danh sách phòng trong giỏ hàng
+U -> CP: Nhấn vào nút "Đặt phòng" ở phòng cần đặt \ntrong danh sách phòng 
+CP -> BP: Chuyển sang trang "Đặt phòng"
+deactivate CP
+activate BP
+BP --> U: Hiển thị trang "Đặt phòng"
+U -> BP: Nhập thông tin cá nhân
+U -> BP: Tùy chỉnh thông tin phòng cần đặt
+U -> BP: Chọn phương thức thanh toán
+' ref over U, DB
+'     [Chỉnh sửa thông tin Phòng cần đặt]
+' end ref
+U -> BP: Nhấn nút "Đặt phòng"
+BP -> BS: Gửi yêu cầu đặt phòng
+activate BS
+BS -> DB: Lấy thông tin phòng
+activate DB
+DB --> BS: Trả về thông tin phòng
+deactivate DB
+BS --> BP: Trả về kết quả đặt phòng
+deactivate BS
+BP --> U: Hiển thị thông báo "Đặt phòng thành công"
+deactivate CP
+deactivate BP
+
+
+
+@enduml

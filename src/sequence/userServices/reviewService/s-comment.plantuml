@@ -1,0 +1,38 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Bình luận Phòng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":NavigationBar" as NB  
+boundary ":MyCollectionsPage" as MCP
+boundary ":ReviewPage" as RP
+control ":ReviewService" as RS
+database ":Database" as DB  
+
+ref over U, DB
+    [Đánh giá Phòng]
+end ref
+
+activate U
+activate RP
+
+U -> RP: Chọn trường bình luận và nhập bình luận
+U -> RP: Nhấn nút "Gửi bình luận"
+RP -> RS: Gửi yêu cầu bình luận
+activate RS
+RS -> DB: Lưu bình luận
+activate DB
+DB -> RS: Trả về kết quả
+deactivate DB
+RS -> RP: Trả về kết quả
+deactivate RS
+RP -> U: Hiển thị kết quả
+deactivate RP
+
+
+@enduml

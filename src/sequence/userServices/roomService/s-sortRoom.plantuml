@@ -1,0 +1,37 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Sắp xếp danh sách Phòng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":SearchResultPage" as SRP  
+control ":RoomService" as RS
+database ":Database" as DB  
+
+ref over U, DB
+    [Tìm kiếm phòng]
+end ref
+
+
+activate U
+U -> SRP: Chọn nút "Sắp xếp" trên màn hình danh sách phòng
+activate SRP
+SRP --> U: Hiển thị menu các tiêu chí sắp xếp
+U -> SRP: Chọn tiêu chí sắp xếp
+SRP -> RS: Gửi yêu cầu sắp xếp danh sách phòng
+activate RS
+RS -> DB: Lấy dữ liệu phòng từ database
+activate DB
+DB --> RS: Trả về dữ liệu phòng
+deactivate DB
+RS -> RS: Sắp xếp danh sách phòng \n theo tiêu chí đã chọn
+RS -> SRP: Trả về danh sách phòng đã sắp xếp
+deactivate RS
+SRP --> U: Hiển thị danh sách phòng đã sắp xếp
+deactivate SRP
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Xem lịch sử đặt phòng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":NavigationBar" as NB  
+boundary ":BookingHistoryPage" as BHP
+
+activate U
+U -> NB: Click vào tên người dùng\n trên thanh điều hướng
+activate NB
+NB --> U: Hiển thị menu chức năng
+U -> NB: Click vào "Lịch sử đặt phòng"
+NB -> BHP: Chuyến đến trang trang "Lịch sử đặt phòng"
+deactivate NB
+activate BHP
+BHP --> U: Hiển thị danh sách các phòng đã đặt
+
+@enduml

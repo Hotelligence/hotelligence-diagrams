@@ -1,0 +1,35 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Lọc Danh sách Khách sạn" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":SearchResultPage" as SRP  
+control ":RoomService" as RS
+database ":Database" as DB  
+
+ref over U, DB
+    [Tìm kiếm Khách sạn]
+end ref
+
+
+activate U
+U -> SRP: Chọn các tiêu chí lọc có sẵn\n trên màn hình danh sách khách sạn
+activate SRP
+SRP -> RS: Gửi yêu cầu lọc khách sạn
+activate RS
+RS -> DB: Lấy dữ liệu khách sạn từ database
+activate DB
+DB --> RS: Trả về dữ liệu khách sạn
+deactivate DB
+RS -> RS: Lọc danh sách khách sạn \n theo tiêu chí đã chọn
+RS --> SRP: Trả về danh sách khách sạn đã lọc
+deactivate RS
+SRP --> U: Hiển thị danh sách khách sạn đã lọc
+deactivate SRP
+
+@enduml

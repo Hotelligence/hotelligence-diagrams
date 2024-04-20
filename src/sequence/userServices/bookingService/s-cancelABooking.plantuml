@@ -1,0 +1,36 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Hủy đặt phòng" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":BookingHistoryPage" as BHP  
+control ":BookingService" as BS
+database ":Database" as DB  
+
+activate U
+ref over U, DB
+    [Xem lịch sử đặt phòng]
+end ref
+activate BHP
+U -> BHP: Chọn "Hủy đặt phòng" ở phòng muốn hủy
+BHP --> U: Hiển thị cửa sổ popup xác nhận hủy đặt phòng
+U -> BHP: Bấm nút "Đồng ý"
+BHP -> BS: Gửi yêu cầu hủy đặt phòng
+activate BS
+BS -> BS: Xác thực yêu cầu
+BS -> DB: Lưu thông tin xuống cơ sở dữ liệu
+activate DB
+DB --> BS: Trả về kết quả
+deactivate DB
+BS --> BHP: Trả về kết quả
+deactivate BS
+BHP --> U: Hiển thị kết quả hủy đặt phòng thành công
+deactivate BHP
+
+
+@enduml

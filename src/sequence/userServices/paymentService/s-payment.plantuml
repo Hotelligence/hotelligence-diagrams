@@ -17,17 +17,20 @@ ref over U, DB
     [Đặt phòng]
 end ref
 
-opt Người dùng chọn "Thanh toán bằng tiền mặt"
-    note right of U
-        Người dùng trả tiền trực tiếp khi nhận phòng
-    end note
-else Người dùng chọn "Thanh toán trực tuyến"
+opt Người dùng chọn "Thanh toán tại khách sạn"
     activate BP
     BP -> PP: Chuyển đến trang "Thanh toán"
     deactivate BP
     activate PP
-    PP --> U: Hiển thị mã QR thanh toán
-    U -> PP: Quét mã QR thanh toán
+    PP --> U: Hiển thị trang thanh toán với \nthông báo yêu cầu khách hàng \nthanh toán tại khách sạn
+    deactivate PP
+else Người dùng chọn "Thanh toán trực tuyến"
+    activate BP    
+    BP -> PP: Chuyển đến trang "Thanh toán"
+    deactivate BP
+    activate PP
+    PP --> U: Hiển thị trang lựa chọn \n hình thức thanh toán trực tuyến\n(bằng thẻ tín dụng hoặc ví điện tử)
+    U -> PP: Người dùng chọn hình thức thanh toán
     PP -> PS: Gửi yêu cầu thanh toán
     activate PS
     PS -> DB: Truy vấn dữ liệu thanh toán

@@ -8,31 +8,27 @@ skinparam SequenceMessageAlignment center
 autonumber
 
 actor "Người dùng" as U
-boundary ":CartPage" as CP
+boundary ":HotelDetailsPage" as HDP
 boundary ":BookingPage" as BP
+boundary ":BookingStatusPage" as BSP
 control ":BookingService" as BS
 database ":Database" as DB  
 
 ref over U, DB
-    [Thêm Phòng vào Giỏ hàng]
+    [Xem thông tin Khách sạn]
 end ref
 
 activate U
 
-U -> CP: Nhấn vào giỏ hàng trên màn hình
-activate CP
-CP --> U: Hiển thị danh sách phòng trong giỏ hàng
-U -> CP: Nhấn vào nút "Đặt phòng" ở phòng cần đặt \ntrong danh sách phòng 
-CP -> BP: Chuyển sang trang "Đặt phòng"
-deactivate CP
+U -> HDP: Nhấn vào nút "Đặt phòng" trên phòng cần đặt
+activate HDP
+HDP -> BP: Chuyển sang trang "Đặt phòng"
+deactivate HDP
 activate BP
 BP --> U: Hiển thị trang "Đặt phòng"
 U -> BP: Nhập thông tin cá nhân
-U -> BP: Tùy chỉnh thông tin phòng cần đặt
+U -> BP: Kiểm tra thông tin phòng cần đặt
 U -> BP: Chọn phương thức thanh toán
-' ref over U, DB
-'     [Chỉnh sửa thông tin Phòng cần đặt]
-' end ref
 U -> BP: Nhấn nút "Đặt phòng"
 BP -> BS: Gửi yêu cầu đặt phòng
 activate BS
@@ -42,9 +38,12 @@ DB --> BS: Trả về thông tin phòng
 deactivate DB
 BS --> BP: Trả về kết quả đặt phòng
 deactivate BS
-BP --> U: Hiển thị thông báo "Đặt phòng thành công"
-deactivate CP
+BP -> BSP: Chuyển sang trang "Tình trạng đặt phòng"
 deactivate BP
+activate BSP
+BSP --> U: Hiển thị thông báo "Đặt phòng thành công"
+deactivate HDP
+
 
 
 

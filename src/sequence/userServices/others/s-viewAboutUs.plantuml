@@ -1,0 +1,23 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Xem thông tin trang web" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":NavigationBar" as NB  
+boundary ":AboutUsPage" as AUP
+
+activate U
+U -> NB: Click vào "Về chúng tôi" trên thanh điều hướng
+activate NB
+NB -> AUP: Chuyển hướng đến trang "Về chúng tôi"
+deactivate NB
+activate AUP
+AUP --> U: Hiển thị trang "Về chúng tôi"
+deactivate AUP
+
+@enduml

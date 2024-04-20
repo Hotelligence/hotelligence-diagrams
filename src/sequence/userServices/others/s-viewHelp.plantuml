@@ -1,0 +1,25 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Xem thông tin hỗ trợ" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":NavigationBar" as NB  
+boundary ":HelpPage" as HP
+
+activate U
+U -> NB: Click vào "Hỗ trợ" trên thanh điều hướng
+activate NB
+NB -> HP: Chuyển hướng đến trang "Hỗ trợ"
+deactivate NB
+activate HP
+HP --> U: Hiển thị trang "Hỗ trợ"
+U -> HP: Xem thông tin hỗ trợ \n(Người dùng có thể tùy chọn thông tin hỗ trợ: FAQ hoặc Liên hệ trực tiếp)
+HP --> U: Hiển thị thông tin hỗ trợ tương ứng
+deactivate HP
+
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Xem thông tin Khách sạn" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng" as U
+boundary ":SearchResultPage" as SRP  
+boundary ":HotelDetailPage" as RDP
+control ":RoomService" as RS
+database ":Database" as DB  
+
+ref over U, DB
+    [Tìm kiếm Khách sạn]
+end ref
+
+
+activate U
+U -> SRP: Chọn một khách sạn từ danh sách khách sạn\n hiển thị trên màn hình
+activate SRP
+SRP -> RS: Gửi yêu cầu xem thông tin khách sạn
+activate RS
+RS -> DB: Lấy dữ liệu khách sạn từ database
+activate DB
+DB --> RS: Trả về dữ liệu khách sạn
+deactivate DB
+SRP -> RDP: Chuyển hướng đến\n trang chi tiết khách sạn
+deactivate SRP
+activate RDP
+deactivate DB
+RS -> RDP: Trả về dữ liệu thông tin khách sạn
+deactivate RS
+RDP --> U: Hiển thị trang thông tin chi tiết khách sạn
+deactivate RDP
+
+@enduml

@@ -8,32 +8,31 @@ skinparam SequenceMessageAlignment center
 autonumber
 
 actor "Người dùng" as U
-boundary ":SearchResultPage" as SRP  
-boundary ":RoomDetailPage" as RDP
+boundary ":HotelDetailPage" as HDP
+boundary ":RoomDetailPopup" as RDP
 control ":RoomService" as RS
 database ":Database" as DB  
 
 ref over U, DB
-    [Tìm kiếm phòng]
+    [Xem thông tin Khách sạn]
 end ref
 
 
 activate U
-U -> SRP: Chọn một phòng từ danh sách phòng\n hiển thị trên màn hình
-activate SRP
-SRP -> RS: Gửi yêu cầu xem thông tin phòng
+U -> HDP: Chọn "Xem thêm chi tiết" ở một phòng bất kỳ
+activate HDP
+HDP -> RS: Lấy thông tin phòng
 activate RS
-RS -> DB: Lấy dữ liệu phòng từ database
+RS -> DB: Truy vấn thông tin phòng
 activate DB
-DB --> RS: Trả về dữ liệu phòng
+DB --> RS: Trả về thông tin phòng
 deactivate DB
-SRP -> RDP: Chuyển hướng đến\n trang chi tiết phòng
-deactivate SRP
-activate RDP
-deactivate DB
-RS -> RDP: Trả về dữ liệu thông tin phòng
+RS --> HDP: Trả về thông tin phòng
 deactivate RS
-RDP --> U: Hiển thị danh sách phòng đã lọc
+HDP -> RDP: Mở cửa sổ popup thông tin phòng
+activate RDP
+RDP --> U: Hiển thị thông tin phòng
 deactivate RDP
+deactivate HDP
 
 @enduml

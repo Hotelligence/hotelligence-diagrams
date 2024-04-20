@@ -9,26 +9,24 @@ autonumber
 
 actor "Người dùng" as U
 boundary ":NavigationBar" as NB  
-boundary ":MyCollectionsPage" as MCP
+boundary ":BookingHistoryPage" as BHP
 boundary ":ReviewPage" as RP
 control ":ReviewService" as RS
 database ":Database" as DB  
 
 activate U
-U -> NB: Click vào tên người dùng\n trên thanh điều hướng
-activate NB
-NB --> U: Hiển thị menu chức năng
-U -> NB: Click vào "My Collections"
-NB -> MCP: Chuyến đến trang trang "Bộ sưu tập của tôi"
-deactivate NB
-activate MCP
-MCP --> U: Hiển thị danh sách các phòng đã đặt
-U -> MCP: Click vào phòng cần đánh giá
-MCP -> RP: Chuyển đến trang "Đánh giá phòng"
-deactivate MCP
+
+ref over U, DB
+    [Xem lịch sử đặt phòng]
+end ref
+
+U -> BHP: Click vào nút "Đánh giá" ở phòng cần đánh giá
+BHP -> RP: Chuyển đến trang "Đánh giá phòng"
+deactivate BHP
 activate RP
 RP --> U: Hiển thị trang "Đánh giá phòng"
-U -> RP: Đánh giá phòng (bằng cách đánh số sao)
+U -> RP: Đánh giá phòng (bằng cách đánh số sao) và/hoặc thêm bình luận
+U -> RP: Bấm nút "Gửi"
 RP -> RS: Gửi yêu cầu đánh giá phòng
 activate RS
 RS -> DB: Lưu thông tin đánh giá phòng
@@ -38,5 +36,6 @@ deactivate DB
 RS --> RP: Trả về thông tin đánh giá phòng
 deactivate RS
 RP --> U: Hiển thị thông báo đánh giá thành công
+deactivate RP
 
 @enduml

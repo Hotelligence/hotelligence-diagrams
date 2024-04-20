@@ -1,0 +1,45 @@
+@startuml
+
+title <size: 24> Sơ đồ hoạt động "Đăng nhập" </size>
+
+|Người dùng|
+start
+:Chọn "Đăng nhập";
+|Hệ thống|
+:Chuyển đến trang đăng nhập;
+|Người dùng|
+if (Chọn hình thức đăng nhập) is (Bằng tài khoản Google) then 
+    |Hệ thống|
+    :Chuyển đến trang đăng nhập Google;
+    |Người dùng|
+    :Chọn tài khoản Google;
+else (Bằng Email)
+    |Người dùng|
+    :Nhập Email và bấm "Tiếp tục";
+    |Hệ thống|
+    :Kiểm tra Email;
+    if (Email không tồn tại) then (Không tồn tại)
+        |Hệ thống|
+        :Hiển thị thông báo "Email không tồn tại";
+        |Người dùng|
+        :Nhập Email và bấm "Tiếp tục";
+    else (Tồn tại)
+        |Hệ thống|
+        :Kiểm tra mật khẩu;
+        if (Mật khẩu không đúng) then (Không đúng)
+            |Hệ thống|
+            :Hiển thị thông báo "Mật khẩu không đúng";
+            |Người dùng|
+            :Nhập mật khẩu và bấm "Đăng nhập";
+        else (Đúng)
+            |Hệ thống|
+            :Chuyển đến trang chính;
+        endif
+
+
+
+
+
+
+
+@enduml

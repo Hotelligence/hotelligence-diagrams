@@ -10,7 +10,7 @@ autonumber
 actor "Người dùng" as U
 boundary ":NavigationBar" as NB  
 boundary ":BookingHistoryPage" as BHP
-boundary ":ReviewPage" as RP
+boundary ":ReviewPopup" as RP
 control ":ReviewService" as RS
 database ":Database" as DB  
 
@@ -20,13 +20,15 @@ ref over U, DB
     [Xem lịch sử đặt phòng]
 end ref
 
+activate BHP
 U -> BHP: Click vào nút "Đánh giá" ở phòng cần đánh giá
-BHP -> RP: Chuyển đến trang "Đánh giá phòng"
+
+BHP -> RP: Hiển thị cửa sổ popup "Đánh giá phòng"
 deactivate BHP
 activate RP
-RP --> U: Hiển thị trang "Đánh giá phòng"
-U -> RP: Đánh giá phòng (bằng cách đánh số sao) và/hoặc thêm bình luận
-U -> RP: Bấm nút "Gửi"
+RP --> U: Hiển thị cửa sổ popup "Đánh giá phòng"
+U -> RP: Đánh giá các tiêu chí trên thang điểm 10 và/hoặc thêm bình luận
+U -> RP: Bấm nút "Gửi đánh giá"
 RP -> RS: Gửi yêu cầu đánh giá phòng
 activate RS
 RS -> DB: Lưu thông tin đánh giá phòng

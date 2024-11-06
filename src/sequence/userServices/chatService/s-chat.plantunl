@@ -1,0 +1,62 @@
+@startuml
+
+title <size: 24> Sơ đồ tuần tự "Trò chuyện trực tuyến" </size>
+
+skinparam style strictuml
+skinparam SequenceMessageAlignment center
+
+autonumber
+
+actor "Người dùng 1" as U1
+actor "Người dùng 2" as U2
+boundary ":HotelDetailsPage" as HDP
+boundary ":Chatbox" as CB
+control ":ChatService" as CS
+database ":Database" as DB  
+
+activate U1
+
+U1 -> HDP: Tại trang Thông tin khách sạn,\n bấm vào hộp chat
+activate HDP
+HDP -> CB: Mở hộp chat
+activate CB
+CB --> U1: Hiển thị hộp chat
+
+U1 -> CB: Nhập tin nhắn và gửi
+CB -> CS: Gửi yêu cầu tin nhắn
+activate CS
+
+CS -> DB: Gọi CSDL
+activate DB
+
+DB --> CS: Lưu tin nhắn xuống CSDL và trả về
+deactivate DB
+
+CS --> CB: Nhận tin nhắn và \n hiển thị tin nhắn trên chatbox
+deactivate CS
+
+CB --> U2: Hiển thị thông báo tin nhắn
+activate U2
+U2 -> CB: Trả lời tin nhắn
+
+CB -> CS: Gửi yêu cầu tin nhắn
+activate CS
+
+CS -> DB: Gọi CSDL
+activate DB
+
+DB --> CS: Lưu tin nhắn xuống CSDL và trả về
+deactivate DB
+
+CS --> CB: Nhận tin nhắn và \n hiển thị tin nhắn trên chatbox
+deactivate CS
+
+CB --> U1: Hiển thị tin nhắn
+CB --> U2: Hiển thị tin nhắn
+deactivate CB
+
+
+
+
+
+@enduml
